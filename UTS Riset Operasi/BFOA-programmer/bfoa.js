@@ -8,7 +8,7 @@ class Bacteria {
 
     initialize(min, max) {
         for (let i = 0; i < this.nDimensi; i++) {
-            this.position[i] = Math.floor(Math.random() * (max - min) + min);
+            this.position[i] = Math.floor(Math.random() * (max - min + 1) + min);
         }
         this.calculateFitness();
     }
@@ -17,10 +17,10 @@ class Bacteria {
         this.fitness = this.objFunction(...this.position);
     }
 
-    move(stepSize) {
+    move(stepSize, min, max) {
         for (let i = 0; i < this.nDimensi; i++) {
             this.position[i] += stepSize * (Math.random() * 2 - 1);
-            this.position[i] = Math.max(0, Math.floor(this.position[i])); 
+            this.position[i] = Math.min(max, Math.max(min, Math.floor(this.position[i])));
         }
         this.calculateFitness();
     }
@@ -48,7 +48,7 @@ class BFOA {
     }
 
     chemotaxis() {
-        this.bacteria.forEach(bacterium => bacterium.move(this.stepSize));
+        this.bacteria.forEach(bacterium => bacterium.move(this.stepSize, 0, 20));
     }
 
     reproduction() {
